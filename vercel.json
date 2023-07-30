@@ -1,5 +1,8 @@
 {
-    "functions": {
-      "includeFiles": "dist/**"
-    }
+    "rewrites": [
+      {
+        "source": "/dist/(.*)",
+        "destination": "/api/serveDist"
+      }
+    ]
   }
