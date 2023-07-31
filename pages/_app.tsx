@@ -25,7 +25,7 @@ const getNewsData = async ({ queryKey }) => {
   let data = await res.json();
 
   // Retrieve theme_posts_per_page from WordPress REST API
-  let themePostsPerPageRes = await fetch('https://easysoulstheme.infinityfreeapp.com/wp-json/theme_settings/v1/posts_per_page');
+  let themePostsPerPageRes = await fetch('http://localhost/easysouls/wp-json/theme_settings/v1/posts_per_page');
   let themePostsPerPage = await themePostsPerPageRes.json();
 
   // Split articles
@@ -48,7 +48,7 @@ const MyApp: AppType = ({ Component, pageProps }: AppProps) => {
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    fetch('https://easysoulstheme.infinityfreeapp.com/wp-json/theme_settings/v1/posts_per_page')
+    fetch('http://localhost/easysouls/wp-json/theme_settings/v1/posts_per_page')
       .then(response => response.json())
       .then(data => {
         setThemePostsPerPage(data.theme_posts_per_page);

@@ -46953,7 +46953,7 @@ var getNewsData = /*#__PURE__*/function () {
           case 7:
             data = _context.sent;
             _context.next = 10;
-            return fetch('https://easysoulstheme.infinityfreeapp.com/wp-json/theme_settings/v1/posts_per_page');
+            return fetch('http://localhost/easysouls/wp-json/theme_settings/v1/posts_per_page');
           case 10:
             themePostsPerPageRes = _context.sent;
             _context.next = 13;
@@ -47001,7 +47001,7 @@ var MyApp = function MyApp(_ref3) {
     currentPage = _useState3[0],
     setCurrentPage = _useState3[1];
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
-    fetch('https://easysoulstheme.infinityfreeapp.com/wp-json/theme_settings/v1/posts_per_page').then(function (response) {
+    fetch('http://localhost/easysouls/wp-json/theme_settings/v1/posts_per_page').then(function (response) {
       return response.json();
     }).then(function (data) {
       setThemePostsPerPage(data.theme_posts_per_page);
