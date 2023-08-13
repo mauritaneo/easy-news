@@ -7,7 +7,6 @@ module.exports = {
   },
 
   async headers() {
-
     return [
       {
         // matching all API routes
