@@ -46944,14 +46944,55 @@ var queryClient = new _tanstack_react_query__WEBPACK_IMPORTED_MODULE_6__.QueryCl
   }
 });
 
+var useThemeSettings = function useThemeSettings() {
+  var _useQuery = (0,_tanstack_react_query__WEBPACK_IMPORTED_MODULE_7__.useQuery)(["themeSettings"], /*#__PURE__*/(0,C_xampp_htdocs_easysouls_wp_content_themes_easysouls_easy_news_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])( /*#__PURE__*/C_xampp_htdocs_easysouls_wp_content_themes_easysouls_easy_news_node_modules_babel_runtime_regenerator_index_js__WEBPACK_IMPORTED_MODULE_2___default().mark(function _callee() {
+      var response, _yield$response$json, data;
+      return C_xampp_htdocs_easysouls_wp_content_themes_easysouls_easy_news_node_modules_babel_runtime_regenerator_index_js__WEBPACK_IMPORTED_MODULE_2___default().wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              _context.next = 2;
+              return fetch('https://517e-82-61-220-104.ngrok-free.app/easysouls/', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                  query: "\n            query {\n              themeSettings {\n                postsPerPage\n              }\n            }\n          "
+                })
+              });
+            case 2:
+              response = _context.sent;
+              _context.next = 5;
+              return response.json();
+            case 5:
+              _yield$response$json = _context.sent;
+              data = _yield$response$json.data;
+              return _context.abrupt("return", data.themeSettings.postsPerPage);
+            case 8:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }))),
+    isLoading = _useQuery.isLoading,
+    isError = _useQuery.isError,
+    data = _useQuery.data;
+  return {
+    isLoading: isLoading,
+    isError: isError,
+    data: data
+  };
+};
 var getNewsData = /*#__PURE__*/function () {
-  var _ref2 = (0,C_xampp_htdocs_easysouls_wp_content_themes_easysouls_easy_news_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])( /*#__PURE__*/C_xampp_htdocs_easysouls_wp_content_themes_easysouls_easy_news_node_modules_babel_runtime_regenerator_index_js__WEBPACK_IMPORTED_MODULE_2___default().mark(function _callee2(_ref) {
-    var queryKey, page, cacheKey, cachedData, res, data, _useQuery, isSettingsLoading, isSettingsError, settingsData, articlesPerPage, startIndex, endIndex, totalResults, articles;
+  var _ref3 = (0,C_xampp_htdocs_easysouls_wp_content_themes_easysouls_easy_news_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])( /*#__PURE__*/C_xampp_htdocs_easysouls_wp_content_themes_easysouls_easy_news_node_modules_babel_runtime_regenerator_index_js__WEBPACK_IMPORTED_MODULE_2___default().mark(function _callee2(_ref2) {
+    var queryKey, page, cacheKey, cachedData, res, _useThemeSettings, isSettingsLoading, isSettingsError, settingsData, articlesPerPage, startIndex, endIndex, data, totalResults, articles;
     return C_xampp_htdocs_easysouls_wp_content_themes_easysouls_easy_news_node_modules_babel_runtime_regenerator_index_js__WEBPACK_IMPORTED_MODULE_2___default().wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
-            queryKey = _ref.queryKey;
+            queryKey = _ref2.queryKey;
             page = queryKey[1];
             cacheKey = "news:".concat(page);
             cachedData = localStorage.getItem(cacheKey);
@@ -46965,53 +47006,23 @@ var getNewsData = /*#__PURE__*/function () {
             return fetch("https://gnews.io/api/v4/search?q=example&lang=en&country=us&max=10&apikey=11a109f090b2d2bfa163bd4c277743d5");
           case 8:
             res = _context2.sent;
-            _context2.next = 11;
-            return res.json();
-          case 11:
-            data = _context2.sent;
             // Retrieve theme_posts_per_page from GraphQL endpoint
-            _useQuery = (0,_tanstack_react_query__WEBPACK_IMPORTED_MODULE_7__.useQuery)(["themeSettings"], /*#__PURE__*/(0,C_xampp_htdocs_easysouls_wp_content_themes_easysouls_easy_news_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])( /*#__PURE__*/C_xampp_htdocs_easysouls_wp_content_themes_easysouls_easy_news_node_modules_babel_runtime_regenerator_index_js__WEBPACK_IMPORTED_MODULE_2___default().mark(function _callee() {
-              var response, _yield$response$json, data;
-              return C_xampp_htdocs_easysouls_wp_content_themes_easysouls_easy_news_node_modules_babel_runtime_regenerator_index_js__WEBPACK_IMPORTED_MODULE_2___default().wrap(function _callee$(_context) {
-                while (1) {
-                  switch (_context.prev = _context.next) {
-                    case 0:
-                      _context.next = 2;
-                      return fetch('http://localhost/easysouls/graphql', {
-                        method: 'POST',
-                        headers: {
-                          'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                          query: "\n            query {\n              themeSettings {\n                postsPerPage\n              }\n            }\n          "
-                        })
-                      });
-                    case 2:
-                      response = _context.sent;
-                      _context.next = 5;
-                      return response.json();
-                    case 5:
-                      _yield$response$json = _context.sent;
-                      data = _yield$response$json.data;
-                      return _context.abrupt("return", data.themeSettings.postsPerPage);
-                    case 8:
-                    case "end":
-                      return _context.stop();
-                  }
-                }
-              }, _callee);
-            }))), isSettingsLoading = _useQuery.isLoading, isSettingsError = _useQuery.isError, settingsData = _useQuery.data;
+            _useThemeSettings = useThemeSettings(), isSettingsLoading = _useThemeSettings.isLoading, isSettingsError = _useThemeSettings.isError, settingsData = _useThemeSettings.data;
             if (!isSettingsError) {
-              _context2.next = 16;
+              _context2.next = 13;
               break;
             }
             console.error("Error fetching theme settings");
             return _context2.abrupt("return");
-          case 16:
+          case 13:
             // Split articles
             articlesPerPage = Number(settingsData);
             startIndex = (page - 1) * articlesPerPage;
             endIndex = startIndex + articlesPerPage;
+            _context2.next = 18;
+            return res.json();
+          case 18:
+            data = _context2.sent;
             totalResults = data.articles.length;
             articles = data.articles.slice(startIndex, endIndex); // Cache the data with a TTL of 24 hours
             localStorage.setItem(cacheKey, JSON.stringify({
@@ -47032,7 +47043,7 @@ var getNewsData = /*#__PURE__*/function () {
     }, _callee2);
   }));
   return function getNewsData(_x) {
-    return _ref2.apply(this, arguments);
+    return _ref3.apply(this, arguments);
   };
 }();
 var MyApp = function MyApp(_ref4) {

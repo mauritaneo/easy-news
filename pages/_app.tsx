@@ -24,22 +24,8 @@ const queryClient = new QueryClient({
   },
 });
 
-const getNewsData = async ({ queryKey }) => {
-  let page = queryKey[1];
-  let cacheKey = `news:${page}`;
-  let cachedData = localStorage.getItem(cacheKey);
-
-  if (cachedData) {
-    return JSON.parse(cachedData);
-  }
-
-  let res = await fetch(
-    `https://gnews.io/api/v4/search?q=example&lang=en&country=us&max=10&apikey=11a109f090b2d2bfa163bd4c277743d5`
-  );
-  let data = await res.json();
-
-  // Retrieve theme_posts_per_page from GraphQL endpoint
-  const { isLoading: isSettingsLoading, isError: isSettingsError, data: settingsData } = useQuery(
+const useThemeSettings = () => {
+  const { isLoading, isError, data } = useQuery(
     ["themeSettings"],
     async () => {
       const response = await fetch('https://517e-82-61-220-104.ngrok-free.app/easysouls/', {
@@ -60,6 +46,25 @@ const getNewsData = async ({ queryKey }) => {
     }
   );
 
+  return { isLoading, isError, data };
+};
+
+const getNewsData = async ({ queryKey }) => {
+  let page = queryKey[1];
+  let cacheKey = `news:${page}`;
+  let cachedData = localStorage.getItem(cacheKey);
+
+  if (cachedData) {
+    return JSON.parse(cachedData);
+  }
+
+  let res = await fetch(
+    `https://gnews.io/api/v4/search?q=example&lang=en&country=us&max=10&apikey=11a109f090b2d2bfa163bd4c277743d5`
+  );
+
+  // Retrieve theme_posts_per_page from GraphQL endpoint
+  const { isLoading: isSettingsLoading, isError: isSettingsError, data: settingsData } = useThemeSettings();
+
   if (isSettingsError) {
     console.error("Error fetching theme settings");
     return;
@@ -69,6 +74,7 @@ const getNewsData = async ({ queryKey }) => {
   let articlesPerPage = Number(settingsData);
   let startIndex = (page - 1) * articlesPerPage;
   let endIndex = startIndex + articlesPerPage;
+  let data = await res.json();
   let totalResults = data.articles.length;
   let articles = data.articles.slice(startIndex, endIndex);
 
