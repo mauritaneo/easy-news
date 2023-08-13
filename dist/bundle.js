@@ -46933,7 +46933,6 @@ var __jsx = (react__WEBPACK_IMPORTED_MODULE_1___default().createElement);
 if (typeof window !== "undefined") {
   var _mountElement = document.getElementById('root');
 }
-;
 var queryClient = new _tanstack_react_query__WEBPACK_IMPORTED_MODULE_6__.QueryClient({
   defaultOptions: {
     queries: {
@@ -46986,8 +46985,8 @@ var useThemeSettings = function useThemeSettings() {
   };
 };
 var getNewsData = /*#__PURE__*/function () {
-  var _ref3 = (0,C_xampp_htdocs_easysouls_wp_content_themes_easysouls_easy_news_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])( /*#__PURE__*/C_xampp_htdocs_easysouls_wp_content_themes_easysouls_easy_news_node_modules_babel_runtime_regenerator_index_js__WEBPACK_IMPORTED_MODULE_2___default().mark(function _callee2(_ref2) {
-    var queryKey, page, cacheKey, cachedData, res, _useThemeSettings, isSettingsLoading, isSettingsError, settingsData, articlesPerPage, startIndex, endIndex, data, totalResults, articles;
+  var _ref3 = (0,C_xampp_htdocs_easysouls_wp_content_themes_easysouls_easy_news_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])( /*#__PURE__*/C_xampp_htdocs_easysouls_wp_content_themes_easysouls_easy_news_node_modules_babel_runtime_regenerator_index_js__WEBPACK_IMPORTED_MODULE_2___default().mark(function _callee2(_ref2, themeSettings) {
+    var queryKey, page, cacheKey, cachedData, res, articlesPerPage, startIndex, endIndex, data, totalResults, articles;
     return C_xampp_htdocs_easysouls_wp_content_themes_easysouls_easy_news_node_modules_babel_runtime_regenerator_index_js__WEBPACK_IMPORTED_MODULE_2___default().wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
@@ -47006,22 +47005,20 @@ var getNewsData = /*#__PURE__*/function () {
             return fetch("https://gnews.io/api/v4/search?q=example&lang=en&country=us&max=10&apikey=11a109f090b2d2bfa163bd4c277743d5");
           case 8:
             res = _context2.sent;
-            // Retrieve theme_posts_per_page from GraphQL endpoint
-            _useThemeSettings = useThemeSettings(), isSettingsLoading = _useThemeSettings.isLoading, isSettingsError = _useThemeSettings.isError, settingsData = _useThemeSettings.data;
-            if (!isSettingsError) {
-              _context2.next = 13;
+            if (!themeSettings.isError) {
+              _context2.next = 12;
               break;
             }
             console.error("Error fetching theme settings");
             return _context2.abrupt("return");
-          case 13:
+          case 12:
             // Split articles
-            articlesPerPage = Number(settingsData);
+            articlesPerPage = Number(themeSettings.data);
             startIndex = (page - 1) * articlesPerPage;
             endIndex = startIndex + articlesPerPage;
-            _context2.next = 18;
+            _context2.next = 17;
             return res.json();
-          case 18:
+          case 17:
             data = _context2.sent;
             totalResults = data.articles.length;
             articles = data.articles.slice(startIndex, endIndex); // Cache the data with a TTL of 24 hours
@@ -47035,14 +47032,14 @@ var getNewsData = /*#__PURE__*/function () {
               totalResults: totalResults,
               articlesPerPage: articlesPerPage
             });
-          case 23:
+          case 22:
           case "end":
             return _context2.stop();
         }
       }
     }, _callee2);
   }));
-  return function getNewsData(_x) {
+  return function getNewsData(_x, _x2) {
     return _ref3.apply(this, arguments);
   };
 }();
@@ -47061,7 +47058,10 @@ var MyApp = function MyApp(_ref4) {
   var _useState2 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(1),
     currentPage = _useState2[0],
     setCurrentPage = _useState2[1];
-  var _useQuery2 = (0,_tanstack_react_query__WEBPACK_IMPORTED_MODULE_7__.useQuery)(["news", currentPage], getNewsData, {
+  var themeSettings = useThemeSettings();
+  var _useQuery2 = (0,_tanstack_react_query__WEBPACK_IMPORTED_MODULE_7__.useQuery)(["news", currentPage], function (queryKey) {
+      return getNewsData(queryKey, themeSettings);
+    }, {
       keepPreviousData: true
     }),
     isNewsLoading = _useQuery2.isLoading,

@@ -10,10 +10,8 @@ import { Router, useRouter } from 'next/router';
 import { withRouter } from 'next/router';
 
 if (typeof window !== "undefined") {
-const mountElement = document.getElementById('root');
-};
-
-
+  const mountElement = document.getElementById('root');
+}
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -49,7 +47,7 @@ const useThemeSettings = () => {
   return { isLoading, isError, data };
 };
 
-const getNewsData = async ({ queryKey }) => {
+const getNewsData = async ({ queryKey }, themeSettings) => {
   let page = queryKey[1];
   let cacheKey = `news:${page}`;
   let cachedData = localStorage.getItem(cacheKey);
@@ -63,15 +61,13 @@ const getNewsData = async ({ queryKey }) => {
   );
 
   // Retrieve theme_posts_per_page from GraphQL endpoint
-  const { isLoading: isSettingsLoading, isError: isSettingsError, data: settingsData } = useThemeSettings();
-
-  if (isSettingsError) {
+  if (themeSettings.isError) {
     console.error("Error fetching theme settings");
     return;
   }
 
   // Split articles
-  let articlesPerPage = Number(settingsData);
+  let articlesPerPage = Number(themeSettings.data);
   let startIndex = (page - 1) * articlesPerPage;
   let endIndex = startIndex + articlesPerPage;
   let data = await res.json();
@@ -84,17 +80,17 @@ const getNewsData = async ({ queryKey }) => {
   return { articles, totalResults, articlesPerPage};
 };
 
-
-
 const MyApp: AppType = ({ Component, pageProps }: AppProps) => {
   const [isLoading, setLoading] = useState(false);
   const startLoading = () => setLoading(true);
   const stopLoading = () => setLoading(false);
   const [currentPage, setCurrentPage] = useState(1);
 
+  const themeSettings = useThemeSettings();
+
   const { isLoading: isNewsLoading, isError, isSuccess, data } = useQuery(
     ["news", currentPage],
-    getNewsData,
+    (queryKey) => getNewsData(queryKey, themeSettings),
     {
       keepPreviousData: true,
     }
