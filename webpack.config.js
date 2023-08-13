@@ -20,6 +20,10 @@ module.exports = {
       buffer: require.resolve('buffer/'),
       asset: require.resolve('assert/'),
       util: require.resolve('util/'),
+      url: require.resolve('url/'),
+      net: require.resolve('net/'),
+      tls: require.resolve('tls/'),
+      crypto: require.resolve('crypto-browserify'),
       },
   },
   module: {

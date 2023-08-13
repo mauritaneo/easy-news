@@ -38,7 +38,7 @@ export const Pagination: React.FC<PaginationProps> = ({
     setIsError(false);
     setIsSuccess(false);
 
-    const finalLink = `https://easysoulstheme.infinityfreeapp.com/news/page/pageno/#index`;
+    const finalLink = `https://easysoul.netlify.app/news/page/pageno/#index`;
     let updatedPaginationArray: PaginationItem[] = [];
 
     if (Array.isArray(paginationArray)) {

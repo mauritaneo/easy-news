@@ -15,25 +15,65 @@ const mountElement = document.getElementById('root');
 
 
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000, // 5 minutes
+      cacheTime: 60 * 60 * 1000, // 1 hour
+    },
+  },
+});
 
 const getNewsData = async ({ queryKey }) => {
   let page = queryKey[1];
+  let cacheKey = `news:${page}`;
+  let cachedData = localStorage.getItem(cacheKey);
+
+  if (cachedData) {
+    return JSON.parse(cachedData);
+  }
+
   let res = await fetch(
-    `https://newsapi.org/v2/top-headlines?country=us&apiKey=943ab199552749339456e8d246e23d73`
+    `https://gnews.io/api/v4/search?q=example&lang=en&country=us&max=10&apikey=11a109f090b2d2bfa163bd4c277743d5`
   );
   let data = await res.json();
 
-  // Retrieve theme_posts_per_page from WordPress REST API
-  let themePostsPerPageRes = await fetch('http://localhost/easysouls/wp-json/theme_settings/v1/posts_per_page');
-  let themePostsPerPage = await themePostsPerPageRes.json();
+  // Retrieve theme_posts_per_page from GraphQL endpoint
+  const { isLoading: isSettingsLoading, isError: isSettingsError, data: settingsData } = useQuery(
+    ["themeSettings"],
+    async () => {
+      const response = await fetch('https://517e-82-61-220-104.ngrok-free.app/easysouls/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          query: `
+            query {
+              themeSettings {
+                postsPerPage
+              }
+            }
+          `
+        })
+      });
+      const { data } = await response.json();
+      return data.themeSettings.postsPerPage;
+    }
+  );
+
+  if (isSettingsError) {
+    console.error("Error fetching theme settings");
+    return;
+  }
 
   // Split articles
-  let articlesPerPage = Number(themePostsPerPage.theme_posts_per_page);
+  let articlesPerPage = Number(settingsData);
   let startIndex = (page - 1) * articlesPerPage;
   let endIndex = startIndex + articlesPerPage;
   let totalResults = data.articles.length;
   let articles = data.articles.slice(startIndex, endIndex);
+
+  // Cache the data with a TTL of 24 hours
+  localStorage.setItem(cacheKey, JSON.stringify({ articles, totalResults, articlesPerPage }));
 
   return { articles, totalResults, articlesPerPage};
 };
@@ -44,24 +84,15 @@ const MyApp: AppType = ({ Component, pageProps }: AppProps) => {
   const [isLoading, setLoading] = useState(false);
   const startLoading = () => setLoading(true);
   const stopLoading = () => setLoading(false);
-  const [themePostsPerPage, setThemePostsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
 
-  useEffect(() => {
-    fetch('http://localhost/easysouls/wp-json/theme_settings/v1/posts_per_page')
-      .then(response => response.json())
-      .then(data => {
-        setThemePostsPerPage(data.theme_posts_per_page);
-      })
-  }, [currentPage]);
-
   const { isLoading: isNewsLoading, isError, isSuccess, data } = useQuery(
-  ["news", currentPage],
-  getNewsData,
-  {
-    keepPreviousData: true,
-  }
-);
+    ["news", currentPage],
+    getNewsData,
+    {
+      keepPreviousData: true,
+    }
+  );
 
   if (isError) return (
       <div className="center">Something went wrong, Please try again.</div>
