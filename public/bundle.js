@@ -49,7 +49,7 @@ var Pagination = function Pagination(_ref) {
     setIsLoading(true);
     setIsError(false);
     setIsSuccess(false);
-    var finalLink = "https://easysoulstheme.infinityfreeapp.com/news/page/pageno/#index";
+    var finalLink = "https://easysoul.netlify.app/news/page/pageno/#index";
     var updatedPaginationArray = [];
     if (Array.isArray(paginationArray)) {
       updatedPaginationArray = paginationArray.map(function (pageNo) {
@@ -46933,45 +46933,58 @@ var __jsx = (react__WEBPACK_IMPORTED_MODULE_1___default().createElement);
 if (typeof window !== "undefined") {
   var _mountElement = document.getElementById('root');
 }
-;
-var queryClient = new _tanstack_react_query__WEBPACK_IMPORTED_MODULE_6__.QueryClient();
+var queryClient = new _tanstack_react_query__WEBPACK_IMPORTED_MODULE_6__.QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000,
+      // 5 minutes
+      cacheTime: 60 * 60 * 1000 // 1 hour
+    }
+  }
+});
+
 var getNewsData = /*#__PURE__*/function () {
   var _ref2 = (0,C_xampp_htdocs_easysouls_wp_content_themes_easysouls_easy_news_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])( /*#__PURE__*/C_xampp_htdocs_easysouls_wp_content_themes_easysouls_easy_news_node_modules_babel_runtime_regenerator_index_js__WEBPACK_IMPORTED_MODULE_2___default().mark(function _callee(_ref) {
-    var queryKey, page, res, data, themePostsPerPageRes, themePostsPerPage, articlesPerPage, startIndex, endIndex, totalResults, articles;
+    var queryKey, page, cacheKey, cachedData, res, articlesPerPage, startIndex, endIndex, data, totalResults, articles;
     return C_xampp_htdocs_easysouls_wp_content_themes_easysouls_easy_news_node_modules_babel_runtime_regenerator_index_js__WEBPACK_IMPORTED_MODULE_2___default().wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
             queryKey = _ref.queryKey;
             page = queryKey[1];
-            _context.next = 4;
-            return fetch("https://newsapi.org/v2/top-headlines?country=us&apiKey=943ab199552749339456e8d246e23d73");
-          case 4:
+            cacheKey = "news:".concat(page);
+            cachedData = localStorage.getItem(cacheKey);
+            if (!cachedData) {
+              _context.next = 6;
+              break;
+            }
+            return _context.abrupt("return", JSON.parse(cachedData));
+          case 6:
+            _context.next = 8;
+            return fetch("https://gnews.io/api/v4/search?q=example&lang=en&country=us&max=10&apikey=11a109f090b2d2bfa163bd4c277743d5");
+          case 8:
             res = _context.sent;
-            _context.next = 7;
-            return res.json();
-          case 7:
-            data = _context.sent;
-            _context.next = 10;
-            return fetch('https://easysoulstheme.infinityfreeapp.com/wp-json/theme_settings/v1/posts_per_page');
-          case 10:
-            themePostsPerPageRes = _context.sent;
-            _context.next = 13;
-            return themePostsPerPageRes.json();
-          case 13:
-            themePostsPerPage = _context.sent;
             // Split articles
-            articlesPerPage = Number(themePostsPerPage.theme_posts_per_page);
+            articlesPerPage = 3;
             startIndex = (page - 1) * articlesPerPage;
             endIndex = startIndex + articlesPerPage;
+            _context.next = 14;
+            return res.json();
+          case 14:
+            data = _context.sent;
             totalResults = data.articles.length;
-            articles = data.articles.slice(startIndex, endIndex);
+            articles = data.articles.slice(startIndex, endIndex); // Cache the data with a TTL of 24 hours
+            localStorage.setItem(cacheKey, JSON.stringify({
+              articles: articles,
+              totalResults: totalResults,
+              articlesPerPage: articlesPerPage
+            }));
             return _context.abrupt("return", {
               articles: articles,
               totalResults: totalResults,
               articlesPerPage: articlesPerPage
             });
-          case 20:
+          case 19:
           case "end":
             return _context.stop();
         }
@@ -46994,19 +47007,9 @@ var MyApp = function MyApp(_ref3) {
   var stopLoading = function stopLoading() {
     return setLoading(false);
   };
-  var _useState2 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(10),
-    themePostsPerPage = _useState2[0],
-    setThemePostsPerPage = _useState2[1];
-  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(1),
-    currentPage = _useState3[0],
-    setCurrentPage = _useState3[1];
-  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
-    fetch('https://easysoulstheme.infinityfreeapp.com/wp-json/theme_settings/v1/posts_per_page').then(function (response) {
-      return response.json();
-    }).then(function (data) {
-      setThemePostsPerPage(data.theme_posts_per_page);
-    });
-  }, [currentPage]);
+  var _useState2 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(1),
+    currentPage = _useState2[0],
+    setCurrentPage = _useState2[1];
   var _useQuery = (0,_tanstack_react_query__WEBPACK_IMPORTED_MODULE_7__.useQuery)(["news", currentPage], getNewsData, {
       keepPreviousData: true
     }),
