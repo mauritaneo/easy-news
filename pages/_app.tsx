@@ -26,7 +26,7 @@ const useThemeSettings = () => {
   const { isLoading, isError, data } = useQuery(
     ["themeSettings"],
     async () => {
-      const response = await fetch('https://517e-82-61-220-104.ngrok-free.app/easysouls/', {
+      const response = await fetch('https://f798-82-61-220-104.ngrok-free.app/easysouls/graphql', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
