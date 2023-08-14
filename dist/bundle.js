@@ -46943,83 +46943,35 @@ var queryClient = new _tanstack_react_query__WEBPACK_IMPORTED_MODULE_6__.QueryCl
   }
 });
 
-var useThemeSettings = function useThemeSettings() {
-  var _useQuery = (0,_tanstack_react_query__WEBPACK_IMPORTED_MODULE_7__.useQuery)(["themeSettings"], /*#__PURE__*/(0,C_xampp_htdocs_easysouls_wp_content_themes_easysouls_easy_news_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])( /*#__PURE__*/C_xampp_htdocs_easysouls_wp_content_themes_easysouls_easy_news_node_modules_babel_runtime_regenerator_index_js__WEBPACK_IMPORTED_MODULE_2___default().mark(function _callee() {
-      var response, _yield$response$json, data;
-      return C_xampp_htdocs_easysouls_wp_content_themes_easysouls_easy_news_node_modules_babel_runtime_regenerator_index_js__WEBPACK_IMPORTED_MODULE_2___default().wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              _context.next = 2;
-              return fetch('https://517e-82-61-220-104.ngrok-free.app/easysouls/', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                  query: "\n            query {\n              themeSettings {\n                postsPerPage\n              }\n            }\n          "
-                })
-              });
-            case 2:
-              response = _context.sent;
-              _context.next = 5;
-              return response.json();
-            case 5:
-              _yield$response$json = _context.sent;
-              data = _yield$response$json.data;
-              return _context.abrupt("return", data.themeSettings.postsPerPage);
-            case 8:
-            case "end":
-              return _context.stop();
-          }
-        }
-      }, _callee);
-    }))),
-    isLoading = _useQuery.isLoading,
-    isError = _useQuery.isError,
-    data = _useQuery.data;
-  return {
-    isLoading: isLoading,
-    isError: isError,
-    data: data
-  };
-};
 var getNewsData = /*#__PURE__*/function () {
-  var _ref3 = (0,C_xampp_htdocs_easysouls_wp_content_themes_easysouls_easy_news_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])( /*#__PURE__*/C_xampp_htdocs_easysouls_wp_content_themes_easysouls_easy_news_node_modules_babel_runtime_regenerator_index_js__WEBPACK_IMPORTED_MODULE_2___default().mark(function _callee2(_ref2, themeSettings) {
+  var _ref2 = (0,C_xampp_htdocs_easysouls_wp_content_themes_easysouls_easy_news_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])( /*#__PURE__*/C_xampp_htdocs_easysouls_wp_content_themes_easysouls_easy_news_node_modules_babel_runtime_regenerator_index_js__WEBPACK_IMPORTED_MODULE_2___default().mark(function _callee(_ref) {
     var queryKey, page, cacheKey, cachedData, res, articlesPerPage, startIndex, endIndex, data, totalResults, articles;
-    return C_xampp_htdocs_easysouls_wp_content_themes_easysouls_easy_news_node_modules_babel_runtime_regenerator_index_js__WEBPACK_IMPORTED_MODULE_2___default().wrap(function _callee2$(_context2) {
+    return C_xampp_htdocs_easysouls_wp_content_themes_easysouls_easy_news_node_modules_babel_runtime_regenerator_index_js__WEBPACK_IMPORTED_MODULE_2___default().wrap(function _callee$(_context) {
       while (1) {
-        switch (_context2.prev = _context2.next) {
+        switch (_context.prev = _context.next) {
           case 0:
-            queryKey = _ref2.queryKey;
+            queryKey = _ref.queryKey;
             page = queryKey[1];
             cacheKey = "news:".concat(page);
             cachedData = localStorage.getItem(cacheKey);
             if (!cachedData) {
-              _context2.next = 6;
+              _context.next = 6;
               break;
             }
-            return _context2.abrupt("return", JSON.parse(cachedData));
+            return _context.abrupt("return", JSON.parse(cachedData));
           case 6:
-            _context2.next = 8;
+            _context.next = 8;
             return fetch("https://gnews.io/api/v4/search?q=example&lang=en&country=us&max=10&apikey=11a109f090b2d2bfa163bd4c277743d5");
           case 8:
-            res = _context2.sent;
-            if (!themeSettings.isError) {
-              _context2.next = 12;
-              break;
-            }
-            console.error("Error fetching theme settings");
-            return _context2.abrupt("return");
-          case 12:
+            res = _context.sent;
             // Split articles
-            articlesPerPage = Number(themeSettings.data);
+            articlesPerPage = 3;
             startIndex = (page - 1) * articlesPerPage;
             endIndex = startIndex + articlesPerPage;
-            _context2.next = 17;
+            _context.next = 14;
             return res.json();
-          case 17:
-            data = _context2.sent;
+          case 14:
+            data = _context.sent;
             totalResults = data.articles.length;
             articles = data.articles.slice(startIndex, endIndex); // Cache the data with a TTL of 24 hours
             localStorage.setItem(cacheKey, JSON.stringify({
@@ -47027,25 +46979,25 @@ var getNewsData = /*#__PURE__*/function () {
               totalResults: totalResults,
               articlesPerPage: articlesPerPage
             }));
-            return _context2.abrupt("return", {
+            return _context.abrupt("return", {
               articles: articles,
               totalResults: totalResults,
               articlesPerPage: articlesPerPage
             });
-          case 22:
+          case 19:
           case "end":
-            return _context2.stop();
+            return _context.stop();
         }
       }
-    }, _callee2);
+    }, _callee);
   }));
-  return function getNewsData(_x, _x2) {
-    return _ref3.apply(this, arguments);
+  return function getNewsData(_x) {
+    return _ref2.apply(this, arguments);
   };
 }();
-var MyApp = function MyApp(_ref4) {
-  var Component = _ref4.Component,
-    pageProps = _ref4.pageProps;
+var MyApp = function MyApp(_ref3) {
+  var Component = _ref3.Component,
+    pageProps = _ref3.pageProps;
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(false),
     isLoading = _useState[0],
     setLoading = _useState[1];
@@ -47058,16 +47010,13 @@ var MyApp = function MyApp(_ref4) {
   var _useState2 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(1),
     currentPage = _useState2[0],
     setCurrentPage = _useState2[1];
-  var themeSettings = useThemeSettings();
-  var _useQuery2 = (0,_tanstack_react_query__WEBPACK_IMPORTED_MODULE_7__.useQuery)(["news", currentPage], function (queryKey) {
-      return getNewsData(queryKey, themeSettings);
-    }, {
+  var _useQuery = (0,_tanstack_react_query__WEBPACK_IMPORTED_MODULE_7__.useQuery)(["news", currentPage], getNewsData, {
       keepPreviousData: true
     }),
-    isNewsLoading = _useQuery2.isLoading,
-    isError = _useQuery2.isError,
-    isSuccess = _useQuery2.isSuccess,
-    data = _useQuery2.data;
+    isNewsLoading = _useQuery.isLoading,
+    isError = _useQuery.isError,
+    isSuccess = _useQuery.isSuccess,
+    data = _useQuery.data;
   if (isError) return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement("div", {
     className: "center"
   }, "Something went wrong, Please try again.");

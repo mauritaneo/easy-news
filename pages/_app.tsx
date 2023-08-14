@@ -22,32 +22,7 @@ const queryClient = new QueryClient({
   },
 });
 
-const useThemeSettings = () => {
-  const { isLoading, isError, data } = useQuery(
-    ["themeSettings"],
-    async () => {
-      const response = await fetch('https://f798-82-61-220-104.ngrok-free.app/easysouls/graphql', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          query: `
-            query {
-              themeSettings {
-                postsPerPage
-              }
-            }
-          `
-        })
-      });
-      const { data } = await response.json();
-      return data.themeSettings.postsPerPage;
-    }
-  );
-
-  return { isLoading, isError, data };
-};
-
-const getNewsData = async ({ queryKey }, themeSettings) => {
+const getNewsData = async ({ queryKey }) => {
   let page = queryKey[1];
   let cacheKey = `news:${page}`;
   let cachedData = localStorage.getItem(cacheKey);
@@ -60,14 +35,8 @@ const getNewsData = async ({ queryKey }, themeSettings) => {
     `https://gnews.io/api/v4/search?q=example&lang=en&country=us&max=10&apikey=11a109f090b2d2bfa163bd4c277743d5`
   );
 
-  // Retrieve theme_posts_per_page from GraphQL endpoint
-  if (themeSettings.isError) {
-    console.error("Error fetching theme settings");
-    return;
-  }
-
   // Split articles
-  let articlesPerPage = Number(themeSettings.data);
+  let articlesPerPage = 3;
   let startIndex = (page - 1) * articlesPerPage;
   let endIndex = startIndex + articlesPerPage;
   let data = await res.json();
@@ -86,11 +55,9 @@ const MyApp: AppType = ({ Component, pageProps }: AppProps) => {
   const stopLoading = () => setLoading(false);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const themeSettings = useThemeSettings();
-
   const { isLoading: isNewsLoading, isError, isSuccess, data } = useQuery(
     ["news", currentPage],
-    (queryKey) => getNewsData(queryKey, themeSettings),
+    getNewsData,
     {
       keepPreviousData: true,
     }
