@@ -62,7 +62,7 @@ var Pagination = function Pagination(_ref) {
     setUpdatedPaginationArray(updatedPaginationArray);
     setIsLoading(false);
     setIsSuccess(true);
-  }, [currentPage, paginationArray]);
+  }, [currentPage, totalPages]);
   var getPageLink = function getPageLink(pageNo) {
     return "news/page/".concat(pageNo, "/#index");
   };

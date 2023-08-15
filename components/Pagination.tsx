@@ -53,7 +53,7 @@ export const Pagination: React.FC<PaginationProps> = ({
     setUpdatedPaginationArray(updatedPaginationArray);
     setIsLoading(false);
     setIsSuccess(true);
-  }, [currentPage, paginationArray]);
+  }, [currentPage, totalPages]);
 
   const getPageLink = (pageNo: number) => {
     return `news/page/${pageNo}/#index`
