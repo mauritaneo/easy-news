@@ -50,7 +50,7 @@ const [updatedPaginationArray, setUpdatedPaginationArray] = useState<PaginationI
             onPageChange(currentPage - 1);
           }}
         >
-          « Previous
+          « Prev
         </Link>
       }
 

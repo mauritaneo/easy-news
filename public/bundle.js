@@ -51,7 +51,7 @@ var Pagination = function Pagination(_ref) {
       e.preventDefault();
       onPageChange(currentPage - 1);
     }
-  }, "\xAB Previous"), updatedPaginationArray.map(function (item, index) {
+  }, "\xAB Prev"), updatedPaginationArray.map(function (item, index) {
     if (currentPage !== item.pageNo) {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
         key: "".concat(item.pageNo, "-").concat(index)
