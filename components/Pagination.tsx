@@ -26,42 +26,19 @@ export const Pagination: React.FC<PaginationProps> = ({
   const totalPages = Math.ceil(totalArticles / articlesPerPage);
   const isThereNextPage = currentPage < totalPages;
   const isTherePreviousPage = currentPage > 1;
-  const paginationArray = createPaginationArray(currentPage, totalPages);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isError, setIsError] = useState<boolean>(false);
-  const [isSuccess, setIsSuccess] = useState<boolean>(false);
 
-  const [updatedPaginationArray, setUpdatedPaginationArray] = useState<PaginationItem[]>([]);
+const [updatedPaginationArray, setUpdatedPaginationArray] = useState<PaginationItem[]>([]);
 
-  useEffect(() => {
-    setIsLoading(true);
-    setIsError(false);
-    setIsSuccess(false);
 
-    const finalLink = `https://easysoul.netlify.app/news/page/pageno/#index`;
-    let updatedPaginationArray: PaginationItem[] = [];
-
-    if (Array.isArray(paginationArray)) {
-      updatedPaginationArray = paginationArray.map(pageNo => {
-        return {
-          pageNo,
-          link: finalLink.replace('pageno', pageNo.toString())
-        }
-      });
-    }
-
-    setUpdatedPaginationArray(updatedPaginationArray);
-    setIsLoading(false);
-    setIsSuccess(true);
+    useEffect(() => {
+    const newPaginationArray = createPaginationArray(currentPage, totalPages);
+    setUpdatedPaginationArray(newPaginationArray);
   }, [currentPage, totalPages]);
 
   const getPageLink = (pageNo: number) => {
     return `news/page/${pageNo}/#index`
   };
 
-  if (isLoading) return <div className="center">Loading...</div>;
-  else if (isError) return <div className="center">Something went wrong, Please try again.</div>;
-  else if (isSuccess)
   return (
     <div className='pagination-links'>
       {isTherePreviousPage &&
@@ -121,3 +98,5 @@ export const Pagination: React.FC<PaginationProps> = ({
 };
 
 export default Pagination;
+
+export type { PaginationItem };

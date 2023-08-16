@@ -4,7 +4,7 @@ import React from 'react';
 import { useQuery, QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import ReactDOM from 'react-dom/client';
-import Pagination from "../components/Pagination";
+import {Pagination} from "../components/Pagination";
 // Currently unused imports
 import { Router, useRouter } from 'next/router';
 import { withRouter } from 'next/router';

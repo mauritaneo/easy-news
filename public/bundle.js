@@ -32,45 +32,17 @@ var Pagination = function Pagination(_ref) {
   var totalPages = Math.ceil(totalArticles / articlesPerPage);
   var isThereNextPage = currentPage < totalPages;
   var isTherePreviousPage = currentPage > 1;
-  var paginationArray = (0,_utils_functions__WEBPACK_IMPORTED_MODULE_2__.createPaginationArray)(currentPage, totalPages);
-  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
-    isLoading = _useState[0],
-    setIsLoading = _useState[1];
-  var _useState2 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
-    isError = _useState2[0],
-    setIsError = _useState2[1];
-  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
-    isSuccess = _useState3[0],
-    setIsSuccess = _useState3[1];
-  var _useState4 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
-    updatedPaginationArray = _useState4[0],
-    setUpdatedPaginationArray = _useState4[1];
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
+    updatedPaginationArray = _useState[0],
+    setUpdatedPaginationArray = _useState[1];
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    setIsLoading(true);
-    setIsError(false);
-    setIsSuccess(false);
-    var finalLink = "https://easysoul.netlify.app/news/page/pageno/#index";
-    var updatedPaginationArray = [];
-    if (Array.isArray(paginationArray)) {
-      updatedPaginationArray = paginationArray.map(function (pageNo) {
-        return {
-          pageNo: pageNo,
-          link: finalLink.replace('pageno', pageNo.toString())
-        };
-      });
-    }
-    setUpdatedPaginationArray(updatedPaginationArray);
-    setIsLoading(false);
-    setIsSuccess(true);
+    var newPaginationArray = (0,_utils_functions__WEBPACK_IMPORTED_MODULE_2__.createPaginationArray)(currentPage, totalPages);
+    setUpdatedPaginationArray(newPaginationArray);
   }, [currentPage, totalPages]);
   var getPageLink = function getPageLink(pageNo) {
     return "news/page/".concat(pageNo, "/#index");
   };
-  if (isLoading) return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    className: "center"
-  }, "Loading...");else if (isError) return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    className: "center"
-  }, "Something went wrong, Please try again.");else if (isSuccess) return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "pagination-links"
   }, isTherePreviousPage && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((next_link__WEBPACK_IMPORTED_MODULE_1___default()), {
     href: getPageLink(currentPage),
@@ -126,52 +98,85 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 var createPaginationArray = function createPaginationArray(currentPage, totalPages) {
   var loopableArray = [];
+  var finalLink = "https://easysoul.netlify.app/news/page/pageno/#index";
   if (1 === totalPages) {
     return loopableArray;
   }
-  loopableArray.push(1);
+  loopableArray.push({
+    pageNo: 1,
+    link: getPageLink(1)
+  });
   if (totalPages > 4) {
-    loopableArray.push('...');
+    loopableArray.push({
+      pageNo: '...',
+      link: '#'
+    });
   }
   if (0 < currentPage - 2) {
-    loopableArray.push(currentPage - 2);
+    loopableArray.push({
+      pageNo: currentPage - 2,
+      link: getPageLink(currentPage - 2)
+    });
   }
   if (0 < currentPage - 1) {
-    loopableArray.push(currentPage - 1);
+    loopableArray.push({
+      pageNo: currentPage - 1,
+      link: getPageLink(currentPage - 1)
+    });
   }
-  loopableArray.push(currentPage);
+  loopableArray.push({
+    pageNo: currentPage,
+    link: getPageLink(currentPage)
+  });
   if (totalPages >= currentPage + 1) {
-    loopableArray.push(currentPage + 1);
+    loopableArray.push({
+      pageNo: currentPage + 1,
+      link: getPageLink(currentPage + 1)
+    });
   }
   if (totalPages >= currentPage + 2) {
-    loopableArray.push(currentPage + 2);
+    loopableArray.push({
+      pageNo: currentPage + 2,
+      link: getPageLink(currentPage + 2)
+    });
   }
-  if (-1 === loopableArray.indexOf(totalPages)) {
-    loopableArray.push(totalPages);
+  if (-1 === loopableArray.findIndex(function (item) {
+    return item.pageNo === totalPages;
+  })) {
+    loopableArray.push({
+      pageNo: totalPages,
+      link: getPageLink(totalPages)
+    });
   }
   if (totalPages > 4) {
     var _ellipsisIndex = loopableArray.findIndex(function (element) {
-      return element === "...";
+      return element.pageNo === "...";
     });
     var _totalPagesIndex = loopableArray.findIndex(function (element) {
-      return element === totalPages;
+      return element.pageNo === totalPages;
     });
     if (_ellipsisIndex !== -1 && _totalPagesIndex !== -1) {
       loopableArray.splice(_ellipsisIndex, 1); // Remove the "..." element
-      loopableArray.splice(_totalPagesIndex - 1, 0, "..."); // Insert the "..." element before totalPages
+      loopableArray.splice(_totalPagesIndex - 1, 0, {
+        pageNo: '...',
+        link: '#'
+      }); // Insert the "..." element before totalPages
     }
   }
 
   if (totalPages === currentPage) {
     var _ellipsisIndex2 = loopableArray.findIndex(function (element) {
-      return element === "...";
+      return element.pageNo === "...";
     });
     var _pageOneIndex = loopableArray.findIndex(function (element) {
-      return element === 1;
+      return element.pageNo === 1;
     });
     if (_ellipsisIndex2 !== -1 && _pageOneIndex !== -1) {
       loopableArray.splice(_ellipsisIndex2, totalPages); // Remove the "..." element
-      loopableArray.splice(_pageOneIndex + 1, 0, "..."); // Insert the "..." element after 1
+      loopableArray.splice(_pageOneIndex + 1, 0, {
+        pageNo: '...',
+        link: '#'
+      }); // Insert the "..." element after 1
     }
   }
 
@@ -180,14 +185,23 @@ var createPaginationArray = function createPaginationArray(currentPage, totalPag
   }
   if (currentPage >= 2 && currentPage !== 3) {
     // Add the ... element after the first element of the array
-    loopableArray.splice(1, 0, '...');
+    loopableArray.splice(1, 0, {
+      pageNo: '...',
+      link: '#'
+    });
   }
   if (currentPage === 3) {
     // Add the ... element after the first element of the array
-    loopableArray.splice(2, 0, '...');
+    loopableArray.splice(2, 0, {
+      pageNo: '...',
+      link: '#'
+    });
   }
   if (currentPage === totalPages) {
     loopableArray.splice(1, 1);
+  }
+  function getPageLink(pageNo) {
+    return finalLink.replace('pageno', pageNo.toString());
   }
   return loopableArray;
 };
@@ -47032,7 +47046,7 @@ var MyApp = function MyApp(_ref3) {
       href: d.url,
       target: "_blank"
     }, "more..."));
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement(_components_Pagination__WEBPACK_IMPORTED_MODULE_5__["default"], {
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement(_components_Pagination__WEBPACK_IMPORTED_MODULE_5__.Pagination, {
     data: data,
     totalResults: data.totalResults,
     currentPage: currentPage,
