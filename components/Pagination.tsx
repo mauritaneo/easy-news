@@ -43,11 +43,12 @@ const [updatedPaginationArray, setUpdatedPaginationArray] = useState<PaginationI
     <div className='pagination-links'>
       {isTherePreviousPage &&
         <Link
-          href={getPageLink(currentPage)}
+          href="#"
           className='prev page-numbers'
           onClick={(e) => {
             e.preventDefault();
             onPageChange(currentPage - 1);
+            window.location.hash = "index";
           }}
         >
           « Prev
@@ -67,10 +68,11 @@ const [updatedPaginationArray, setUpdatedPaginationArray] = useState<PaginationI
                 // Page number links
                 <Link
                   className="page-numbers"
-                  href={item.link}
+                  href="#"
                   onClick={(e) => {
                     e.preventDefault();
                     onPageChange(item.pageNo);
+                    window.location.hash = "index";
                   }}
                 >
                   {item.pageNo}
@@ -83,11 +85,12 @@ const [updatedPaginationArray, setUpdatedPaginationArray] = useState<PaginationI
 
       {isThereNextPage &&
         <Link
-          href={getPageLink(currentPage)}
+          href="#"
           className='next page-numbers'
           onClick={(e) => {
             e.preventDefault();
             onPageChange(currentPage + 1);
+            window.location.hash = "index";
           }}
         >
           Next »

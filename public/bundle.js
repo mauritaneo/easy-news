@@ -45,11 +45,12 @@ var Pagination = function Pagination(_ref) {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "pagination-links"
   }, isTherePreviousPage && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((next_link__WEBPACK_IMPORTED_MODULE_1___default()), {
-    href: getPageLink(currentPage),
+    href: "#",
     className: "prev page-numbers",
     onClick: function onClick(e) {
       e.preventDefault();
       onPageChange(currentPage - 1);
+      window.location.hash = "index";
     }
   }, "\xAB Prev"), updatedPaginationArray.map(function (item, index) {
     if (currentPage !== item.pageNo) {
@@ -65,19 +66,21 @@ var Pagination = function Pagination(_ref) {
       // Page number links
       react__WEBPACK_IMPORTED_MODULE_0___default().createElement((next_link__WEBPACK_IMPORTED_MODULE_1___default()), {
         className: "page-numbers",
-        href: item.link,
+        href: "#",
         onClick: function onClick(e) {
           e.preventDefault();
           onPageChange(item.pageNo);
+          window.location.hash = "index";
         }
       }, item.pageNo));
     }
   }), isThereNextPage && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((next_link__WEBPACK_IMPORTED_MODULE_1___default()), {
-    href: getPageLink(currentPage),
+    href: "#",
     className: "next page-numbers",
     onClick: function onClick(e) {
       e.preventDefault();
       onPageChange(currentPage + 1);
+      window.location.hash = "index";
     }
   }, "Next \xBB"));
 };
